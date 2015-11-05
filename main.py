@@ -45,16 +45,29 @@ unique_sets = set([tuple(myset) for myset in flatten(all_disjoint_sets[:])])
 
 random_card = random.choice(flatten(list(unique_sets)))
 optimize = {sets:[] for sets in unique_sets if random_card in sets}
-for key in optimize:
-	unique_sets.remove(key)
+optimize = optimized_sets(optimize, unique_sets)
+final_collection = new_key(optimize)
 
-for key, value in optimize.items():
-	for card_set in unique_sets:
-		if key[0] not in card_set and key[1] not in card_set and key[2] not in card_set:
-			value += [card_set]
+counter = 2
+max_sets = N // 3
+while max_sets > 0:
+	if optimize[max(optimize)] == []:
+		break
+	optimize = optimized_sets(final_collection, unique_sets)	# Dictionary with key/value pairs that don't overlap
+	final_collection = new_key(optimize)						# New dictionary with longer keys
+	max_sets -= 1
+	counter += 1
 
+print(len(max(final_collection)) // 3)
+print("")
 
-
-
-
-
+# Part 3
+sets = max(final_collection)
+counter = 0
+while counter != 3:
+	if not sets:
+		break
+	print(sets[0])
+	sets = sets[1:]
+	if len(sets) % 3 == 0:
+		print("")

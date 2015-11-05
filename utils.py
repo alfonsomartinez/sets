@@ -76,5 +76,39 @@ def subsets(lst, n):
 	return [[lst[0]] + x for x in subsets(lst[1:], n - 1)] + subsets(lst[1:], n)
 
 
+def optimized_sets(dictionary, unique_sets):
+	""" Function that will iterate over all unique sets we have
+	and map them to a dictionary where the key is a tuple of cards
+	that aren't included in our current sets
+	"""
+	for sets in unique_sets:
+		for keys in dictionary:
+			if (sets[0] not in keys) and (sets[1] not in keys) and (sets[2] not in keys):
+				dictionary[keys] += [sets]
+	return dictionary
 
+def optimized_sets2(dictionary, current):
+	""" Function that will iterate over all unique sets we have
+	and map them to a dictionary where the key is a tuple of cards
+	that aren't included in our current sets
+	"""
+	for key in dictionary:
+		for keys, values in current.items():
+			if (values[0] not in key) and (values[1] not in key) and (values[2] not in key):
+				dictionary[key] += values
+	return dictionary
 
+def new_key(dictionary):
+	new_dictionary = {}
+	for key, value in dictionary.items():
+		for sets in value:
+			if sets:
+				new_dictionary[key + sets] = []
+			elif value == []:
+				dictionary[key] = value
+	return new_dictionary
+
+def delete(dictionary, num):
+	keys_to_delete = [key for key in dictionary if len(key) < num or dictionary[key] == []]
+	for key in keys_to_delete:
+		del dictionary[key]
